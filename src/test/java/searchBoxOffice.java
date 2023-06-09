@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.lang.model.element.Element;
 import java.sql.Driver;
 import java.time.Duration;
 import java.util.List;
@@ -31,17 +32,42 @@ public class searchBoxOffice {
         //driver.findElement(By.xpath("//select[@class='custom-select']")).click();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@class='custom-select']")));
-        dropdown.sendKeys("MEDAN");
-        driver.findElement(By.xpath("//select/option[@value='25']")).click();
+        dropdown.sendKeys("JAKARTA");
+        driver.findElement(By.xpath("//select/option[@value='3']")).click();
+        //WebElement -> tipe data, filmList -> nama variable untuk menyimpan film ke element filmlist
+        WebElement filmList = driver.findElement(By.xpath("//select/option[@value='3']"));
+        //untuk mendapatkan semua element film dalam daftar
+        java.util.List<WebElement> films = filmList.findElements(By.xpath("//*[@alt='SEMUA UMUR']"));
+        for (int i=0; i<5; i++) {
+            WebElement film = films.get(i);
+            WebElement judulFilmElement = film.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
+            String judulFilm = judulFilmElement.getText();
+            System.out.println("Film " + (i + 1) + ": " + judulFilm);
+        }
+        WebElement filmPertama = films.get(0);
+        WebElement linkFilm = filmPertama.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
+        linkFilm.click();
         //box_office_element = wait.until(EC.presence_of_all_elements_located(By.xpath("//img[@alt='R17+']")));
 
-        WebElement element = driver.findElement(By.xpath("//*[@alt='R17+']"));
-        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)", element);
+
+
+
+
+        //WebElement element = driver.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
+        //((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)", element);
+        //wait.until(By.xpath(""))
+        //List<WebElement>search = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@alt='SEMUA UMUR']"))).findElements(By.xpath("//*[@alt='SEMUA UMUR']"));
+        //Assert.assertTrue(search.size() >0);
+        //for (int i=0;i<5;i++){
+        //    System.out.println(search.get(i).getAttribute("innerHTML"));
+        //}
+
         //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@alt='R17+']")));
-        WebElement TxtBoxContent = driver.findElement(By.xpath("//*[@alt='R17+']"));
-        boolean checkButtonPresence = TxtBoxContent.isDisplayed();
-        Assert.assertTrue(checkButtonPresence);
-        System.out.println("R17+");
+        //WebElement TxtBoxContent = driver.findElement(By.xpath("//*[@alt='SEMUA UMUR']")).click();
+        //boolean checkButtonPresence = TxtBoxContent.isDisplayed();
+        //Assert.assertTrue(checkButtonPresence);
+        //System.out.println("SEMUA UMUR");
+
         //System.out.println("Printing " + TxtBoxContent.getAttribute("value"));
         //String text =wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@alt='R17+']"))).getText();
         //Assert.assertEquals("R17+", driver.findElement(By.xpath("//*[@alt='R17+']")).getText());
