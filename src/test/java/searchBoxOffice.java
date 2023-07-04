@@ -17,36 +17,41 @@ public class searchBoxOffice {
 
     @Test
     public void ticketBoxOffice () throws InterruptedException {
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\Admin\\Documents\\Selenium\\chromedriver.exe");
-        } else {
-            System.setProperty("webdriver.chrome.driver", "/Users/reinhart/Documents/chromedriver/chromedriver");
-        }
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        WebDriver driver = new ChromeDriver(options);
-
+        WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5L));
         driver.navigate().to("https://21cineplex.com/");
         driver.manage().window().maximize();
         //driver.findElement(By.xpath("//select[@class='custom-select']")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2000));
         WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@class='custom-select']")));
         dropdown.sendKeys("JAKARTA");
-        driver.findElement(By.xpath("//select/option[@value='3']")).click();
+        List<WebElement> adultElemets =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//img[@alt='R17+']"))).findElements(By.xpath("//img[@alt='R17+']"));
+        Assert.assertTrue(adultElemets.size()>0);
+        List<WebElement> movieDesc = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='movie-desc']"))).findElements(By.xpath("//div[@class='movie-desc']"));
+        for(int i=0; i<movieDesc.size(); i++){
+            WebElement adultType = wait.until(ExpectedConditions.visibilityOf(movieDesc.get(i))).findElement(By.xpath("./child::span"));
+            if(adultType.getAttribute("innerHTML").contains("R17+")) {
+                System.out.println(movieDesc.get(i).findElement(By.xpath("./child::h4")).getText());
+            }
+            }
+        Thread.sleep(3000);
+        driver.close();
+
+        //driver.findElement(By.xpath("//select/option[@value='3']")).click();
         //WebElement -> tipe data, filmList -> nama variable untuk menyimpan film ke element filmlist
-        WebElement filmList = driver.findElement(By.xpath("//select/option[@value='3']"));
+        //WebElement filmList = driver.findElement(By.xpath("//select/option[@value='3']"));
         //untuk mendapatkan semua element film dalam daftar
-        java.util.List<WebElement> films = filmList.findElements(By.xpath("//*[@alt='SEMUA UMUR']"));
-        for (int i=0; i<5; i++) {
-            WebElement film = films.get(i);
-            WebElement judulFilmElement = film.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
-            String judulFilm = judulFilmElement.getText();
-            System.out.println("Film " + (i + 1) + ": " + judulFilm);
-        }
-        WebElement filmPertama = films.get(0);
-        WebElement linkFilm = filmPertama.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
-        linkFilm.click();
+        //java.util.List<WebElement> films = filmList.findElements(By.xpath("//*[@alt='SEMUA UMUR']"));
+        //for (int i=0; i<3; i++) {
+           // WebElement film = films.get(i);
+            //WebElement judulFilmElement = film.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
+            //String judulFilm = judulFilmElement.getText();
+            //System.out.println("Film " + (i + 1) + ": " + judulFilm);
+        //}
+        //WebElement filmPertama = films.get(0);
+        //WebElement linkFilm = filmPertama.findElement(By.xpath("//*[@alt='SEMUA UMUR']"));
+        //linkFilm.click();
         //box_office_element = wait.until(EC.presence_of_all_elements_located(By.xpath("//img[@alt='R17+']")));
 
 
